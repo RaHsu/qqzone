@@ -49,6 +49,7 @@
                 dataType:'JSON',
                 success:function(result){
                     document.getElementById('button').innerText = "正在请求服务器";
+                    console.log(result.status);
                     if(result.status === 'success'){
                         document.getElementById('button').innerText = "正在获取数据，10秒钟后将转跳";
                         setTimeout(function(){

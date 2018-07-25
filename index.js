@@ -1,10 +1,15 @@
 const request = require('request');
 const rp = require('request-promise');
 const fs = require("fs");
+const process = require('child_process');
+var arguments = process.argv.splice(2);
 
 // 设置cookie
-const mycookie = 'x-stgw-ssl-info=7551623e6afee19b9097e6d69fbf1418|0.124|1532499817.420|1|r|I|TLSv1.2|ECDHE-RSA-AES128-GCM-SHA256|13500|h2|0; pgv_pvi=4418706432; RK=6bjtBsRwRz; ptcz=36f4e83fa3b834700af4d27c1b8dd726eb2f0ab2ce7a39bafd225ad3f788f5fe; pgv_pvid=6703600965; pt2gguin=o0496081759; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; __Q_w_s__QZN_TodoMsgCnt=1; __Q_w_s_hat_seed=1; zzpaneluin=; zzpanelkey=; pgv_si=s4405411840; _qpsvr_localtk=0.6244716804465245; ptisp=ctc; pgv_info=ssid=s2308249972; qqmusic_uin=; qqmusic_key=; qqmusic_fromtag=; randomSeed=882390; qzmusicplayer=qzone_player_344630103_1532419947563; ptui_loginuin=496076446; uin=o0496081759; skey=@prQjF2BXB; p_uin=o0496081759; pt4_token=RWkcPqFcj9lSAvnEGre2goMsEBx8NCJHu8YznV-gdYM_; p_skey=wXfdtkscUK40KoKNR1R3Kx17VnYZcxPjvObNmPM7urg_; Loading=Yes; cpu_performance_v8=4; rv2=8060221ABD12874DABA902A9D123425577EB3F3EF1A0622EFD; property20=C38C00CBB0277F8BFE47B042E3AF933BB54BEB0B27B2F1D861F6F17BA59FC39B8537AA1C39B8F30A';
-const myQQ = '496081759';
+//const mycookie = 'x-stgw-ssl-info=7551623e6afee19b9097e6d69fbf1418|0.124|1532499817.420|1|r|I|TLSv1.2|ECDHE-RSA-AES128-GCM-SHA256|13500|h2|0; pgv_pvi=4418706432; RK=6bjtBsRwRz; ptcz=36f4e83fa3b834700af4d27c1b8dd726eb2f0ab2ce7a39bafd225ad3f788f5fe; pgv_pvid=6703600965; pt2gguin=o0496081759; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; __Q_w_s__QZN_TodoMsgCnt=1; __Q_w_s_hat_seed=1; zzpaneluin=; zzpanelkey=; pgv_si=s4405411840; _qpsvr_localtk=0.6244716804465245; ptisp=ctc; pgv_info=ssid=s2308249972; qqmusic_uin=; qqmusic_key=; qqmusic_fromtag=; randomSeed=882390; qzmusicplayer=qzone_player_344630103_1532419947563; ptui_loginuin=496076446; uin=o0496081759; skey=@prQjF2BXB; p_uin=o0496081759; pt4_token=RWkcPqFcj9lSAvnEGre2goMsEBx8NCJHu8YznV-gdYM_; p_skey=wXfdtkscUK40KoKNR1R3Kx17VnYZcxPjvObNmPM7urg_; Loading=Yes; cpu_performance_v8=4; rv2=8060221ABD12874DABA902A9D123425577EB3F3EF1A0622EFD; property20=C38C00CBB0277F8BFE47B042E3AF933BB54BEB0B27B2F1D861F6F17BA59FC39B8537AA1C39B8F30A';
+//const myQQ = '496081759';
+
+var myQQ = arguments[0];
+var mycookie = arguments[1];
 var self_url = 'https://h5.qzone.qq.com/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_more?uin='+ myQQ +'&mask=7&g_tk='+ getGTK(parseCookie(mycookie).p_skey)+'&page=1&fupdate=1&clear=1'
 var friend_url = 'https://h5.qzone.qq.com/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_simple?uin=1324789616&mask=2&g_tk=37294197&page=1&fupdate=1';
 

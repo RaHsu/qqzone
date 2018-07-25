@@ -16,6 +16,7 @@
     "got": "^8.3.2",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "selenium-webdriver": "^3.6.0"
+    "selenium-webdriver": "^3.6.0",
+    "supervisor": "^0.12.0"
   }
 }
