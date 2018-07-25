@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>QQ访客</title>
+	<style type="text/css">
+		#box{
+			padding-top: 200px;
+			text-align: center;
+		}
+		.input{
+			height: 25px;
+			width: 300px;
+			padding: 2px 5px;
+			font-size: 16px;
+		}
+		button{
+			background-color: #f09233;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			width: 250px;
+			height: 30px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<h2>输入你的QQ号</h2>
+		<input type="text" name="" class="input" id="qq">
+		<h2>输入你的cookie</h2>
+		<input type="text" name="" class="input" id="cookie">
+		<br>
+		<br>
+		<button onclick="get()" id="button">获取我的访客关系</button>
+	</div>
+</body>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+<script type="text/javascript">
+	function get(){
+		var qq = document.getElementById('qq').value;
+		var cookie = document.getElementById('cookie').value;
+		var send_data = {qq:qq,cookie:cookie}
+		console.log(send_data);
+
+		$.ajax({
+                url:'http://localhost:3000/qq?qq='+qq+'&cookie='+cookie,
+                //data:{data:send_data},
+                type:'POST',
+                dataType:'JSON',
+                success:function(result){
+                    document.getElementById('button').innerText = "正在请求服务器";
+                    if(result.status === 'success'){
+                        document.getElementById('button').innerText = "正在获取数据，10秒钟后将转跳";
+                        setTimeout(function(){
+                        	window.location.herf = "";
+                        },10000);
+                    }else{
+                        alert('获取失败');
+                    }
+                },
+                error:function(xhr,textStatus){
+                    alert("连接服务器失败");
+                }
+            })
+	}
+	
+</script>
+</html>
