@@ -1,15 +1,15 @@
 const request = require('request');
 const rp = require('request-promise');
 const fs = require("fs");
-const process = require('child_process');
-var arguments = process.argv.splice(2);
+
+var arguments = process.argv;
 
 // 设置cookie
-//const mycookie = 'x-stgw-ssl-info=7551623e6afee19b9097e6d69fbf1418|0.124|1532499817.420|1|r|I|TLSv1.2|ECDHE-RSA-AES128-GCM-SHA256|13500|h2|0; pgv_pvi=4418706432; RK=6bjtBsRwRz; ptcz=36f4e83fa3b834700af4d27c1b8dd726eb2f0ab2ce7a39bafd225ad3f788f5fe; pgv_pvid=6703600965; pt2gguin=o0496081759; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; __Q_w_s__QZN_TodoMsgCnt=1; __Q_w_s_hat_seed=1; zzpaneluin=; zzpanelkey=; pgv_si=s4405411840; _qpsvr_localtk=0.6244716804465245; ptisp=ctc; pgv_info=ssid=s2308249972; qqmusic_uin=; qqmusic_key=; qqmusic_fromtag=; randomSeed=882390; qzmusicplayer=qzone_player_344630103_1532419947563; ptui_loginuin=496076446; uin=o0496081759; skey=@prQjF2BXB; p_uin=o0496081759; pt4_token=RWkcPqFcj9lSAvnEGre2goMsEBx8NCJHu8YznV-gdYM_; p_skey=wXfdtkscUK40KoKNR1R3Kx17VnYZcxPjvObNmPM7urg_; Loading=Yes; cpu_performance_v8=4; rv2=8060221ABD12874DABA902A9D123425577EB3F3EF1A0622EFD; property20=C38C00CBB0277F8BFE47B042E3AF933BB54BEB0B27B2F1D861F6F17BA59FC39B8537AA1C39B8F30A';
+//const mycookie = 'x-stgw-ssl-info=8a8db50953ce78932939271bdf479e2f|0.096|1532568350.200|2|.|I|TLSv1.2|ECDHE-RSA-AES128-GCM-SHA256|13500|h2|0; pgv_pvi=4418706432; RK=6bjtBsRwRz; ptcz=36f4e83fa3b834700af4d27c1b8dd726eb2f0ab2ce7a39bafd225ad3f788f5fe; pgv_pvid=6703600965; pt2gguin=o0496081759; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; __Q_w_s__QZN_TodoMsgCnt=1; __Q_w_s_hat_seed=1; randomSeed=882390; ptui_loginuin=496076446; cpu_performance_v8=4; zzpaneluin=; zzpanelkey=; pgv_si=s1515747328; _qpsvr_localtk=0.39046524194540466; ptisp=ctc; uin=o0496081759; skey=@FhWkOR5Xg; p_uin=o0496081759; pt4_token=RRGo6cBLcBEkeawQTllNtegbDpiLZBFwwVWQt8qCfB4_; p_skey=6jF2KiNL8ZjhCgdehISXWhR76L6L42d*IixMbdVTmPA_; Loading=Yes; pgv_info=ssid=s675748675';
 //const myQQ = '496081759';
 
-var myQQ = arguments[0];
-var mycookie = arguments[1];
+var myQQ = arguments[2];
+var mycookie = fs.readFileSync('cookie.txt','utf-8');;
 var self_url = 'https://h5.qzone.qq.com/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_more?uin='+ myQQ +'&mask=7&g_tk='+ getGTK(parseCookie(mycookie).p_skey)+'&page=1&fupdate=1&clear=1'
 var friend_url = 'https://h5.qzone.qq.com/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_simple?uin=1324789616&mask=2&g_tk=37294197&page=1&fupdate=1';
 
@@ -24,6 +24,11 @@ var groups = {
   group3:[]
 }
 
+// 去空格
+function trim(string){
+  return string.replace(/\s+/g,"");
+}
+
 
 // 解析cookie
 function parseCookie(cookieString){
@@ -32,7 +37,7 @@ function parseCookie(cookieString){
 	for(let i of cookie){
 		let a = i.split('=');
     //console.log(a[0],a[1]);
-		cookieDict[a[0].slice(1)] = a[1];
+		cookieDict[trim(a[0])] = a[1];
 	}
 	return cookieDict;
 }
@@ -78,20 +83,22 @@ function getMyVistors(){
         //console.log(data);
         //console.log("------------------------------");
         //console.log('最近访问的访客有：')
-        //nodes.push({id:'0.5英里',group:1});
+        nodes.push({id:'我',group:1});
         for(let i of data){
           // 将自己和好友的关系压入links中
-          links.push({source:'0.5英里',target:i.name,value:1});
+          links.push({source:'我',target:i.name,value:1});
 
           // 把自己的好友信息压入gruop和nodes中
           groups.group1.push({qq:i.uin,name:i.name});
           nodes.push({id:i.name,group:2})
 
 
+
           //console.log(i);
           console.log('昵称：' + i.name);
           console.log('QQ号：' + i.uin);
           for(let v of groups.group1){
+              
               getFriendsVistors(v.qq,v.name);
             }
         } 
@@ -149,6 +156,7 @@ function getFriendsVistors(friend_qq,friend_name){
     }
 
     request(options, function (error, response, body) {
+      //console.log(response.body);
       const code = JSON.parse(body.slice(10,-3)).code;
 
       if(code === 0){
@@ -169,11 +177,11 @@ function getFriendsVistors(friend_qq,friend_name){
 
 
           //console.log(i);
-          //console.log('昵称：' + i.name);
-          //console.log('QQ号：' + i.uin);
+          console.log('昵称：' + i.name);
+          console.log('QQ号：' + i.uin);
         }
       }else{
-        console.log("你没有权限访问");
+        console.log(JSON.parse(body.slice(10,-3)).message);
       }
      
 })
@@ -210,11 +218,11 @@ function getFriendsVistors2(friend_qq,friend_name){
 
 
           //console.log(i);
-          //console.log('昵称：' + i.name);
-          //console.log('QQ号：' + i.uin);
+          console.log('昵称：' + i.name);
+          console.log('QQ号：' + i.uin);
         }
       }else{
-        //console.log("你没有权限访问");
+        console.log(JSON.parse(body.slice(10,-3)).message);
       }
      
 })
@@ -236,8 +244,9 @@ function getFriendsVistors2(friend_qq,friend_name){
 // 先获取自己的好友
 getMyVistors();
 setTimeout(function(){
+  //console.log(groups.group1);
   for(let v of groups.group1){
-    getFriendsVistors2(v.qq,v.name);
+    //getFriendsVistors2(v.qq,v.name);
   }
 },3000);
 setTimeout(function(){
@@ -251,7 +260,7 @@ setTimeout(function(){
     }
    console.log("数据写入成功！");
     })
-},7000)
+},5000)
 
 
 

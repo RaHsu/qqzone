@@ -1,2 +1,5 @@
-var arguments = process.argv.splice(2);
-console.log(arguments);
+
+function trim(string){
+	return string.replace(/\s+/g,"");
+}
+console.log(trim('   ewre   rewre  trettr  '));

@@ -3,6 +3,10 @@ var express = require('express');
 var process = require('child_process');
 var app = express();
 
+function trim(string){
+	return string.replace(/\s+/g,"");
+}
+
 
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -18,15 +22,24 @@ app.post('/qq', function (req, res) {
 	console.log(req.query);
 	let qq = req.query.qq;
 	let cookie = req.query.cookie;
-	console.log('node index '+qq+' '+cookie);
 
-	process.exec('node index '+qq+' '+cookie,function (error, stdout, stderr) {
-        if (error !== null) {
-          console.log('exec error: ' + error);
-        }else{
-        	console.log(stdout);
-        }
-});
+	fs.writeFile('cookie.txt',cookie, function(err){
+    if (err) {
+       return console.error(err);
+      }
+      console.log('cookie写入成功');
+	   	process.exec('node index '+qq,function (error, stdout, stderr) {
+	        if (error !== null) {
+	          console.log('exec error: ' + error);
+	        }else{
+	        	console.log('正在执行index');
+	        	console.log(stdout);
+	        }
+		});
+    })
+
+
+	
 
 	res.send({status:'success'});
 

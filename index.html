@@ -11,11 +11,25 @@
   stroke: #fff;
   stroke-width: 1.5px;
 }
+#box{
+	text-align: center;
+}
 
 </style>
-<svg width="1200" height="800"></svg>
+<div id="box">
+	<svg id="svgBox" width="1080" height="800"></svg>
+</div>
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
+/*var	svgBox = document.getElementById('svgBox');
+svg.height = window.innerHeight
+        || document.documentElement.clientHeight
+        || document.body.clientHeight;
+
+svg.width = window.innerWidth
+        || document.documentElement.clientWidth
+        || document.body.clientWidth;*/
 
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
@@ -25,7 +39,6 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(110))
-    //.force("link", d3.forceLink().distance(function(){return 100})
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -49,14 +62,14 @@ d3.json("data.json", function(error, graph) {
     .data(graph.nodes)
     .enter().append("circle")
       .attr("r", function(d){
-      	if(d.id === '0.5英里'){
-      		return 30;
+      	if(d.id === '我'){
+      		return 35;
       	}
        return 20; 
       })
       .attr("fill", function(d) {
-      	if(d.id === '0.5英里'){
-      		return 'red';
+      	if(d.id === '我'){
+      		return '#f95959';
       	}
        return color(d.group); 
    })
