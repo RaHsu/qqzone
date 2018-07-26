@@ -83,7 +83,7 @@ function getMyVistors(){
         //console.log(data);
         //console.log("------------------------------");
         //console.log('最近访问的访客有：')
-        nodes.push({name:'我',group:1,id:parseInt(myQQ)});
+        //nodes.push({name:'我',group:1,id:parseInt(myQQ)});
         for(let i of data){
           // 将自己和好友的关系压入links中
           links.push({source:myQQ,target:i.uin,value:2});
@@ -170,7 +170,7 @@ function getFriendsVistors(friend_qq,friend_name){
           // 把朋友压入nodes
           nodes.push({id:i.uin,group:3,name:i.name})
           // 把关系压入links
-          links.push({source:friend_name,target:i.uin,value:1}) 
+          links.push({source:friend_qq,target:i.uin,value:1}) 
 
           // 把朋友的qq号再压入
           groups.group1.push({qq:i.uin,name:i.name});
