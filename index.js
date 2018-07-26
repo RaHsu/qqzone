@@ -83,7 +83,7 @@ function getMyVistors(){
         //console.log(data);
         //console.log("------------------------------");
         //console.log('最近访问的访客有：')
-        //nodes.push({name:'我',group:1,id:myQQ});
+        nodes.push({name:'我',group:1,id:parseInt(myQQ)});
         for(let i of data){
           // 将自己和好友的关系压入links中
           links.push({source:myQQ,target:i.uin,value:2});
