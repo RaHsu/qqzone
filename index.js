@@ -83,14 +83,14 @@ function getMyVistors(){
         //console.log(data);
         //console.log("------------------------------");
         //console.log('最近访问的访客有：')
-        nodes.push({id:'我',group:1});
+        //nodes.push({name:'我',group:1,id:myQQ});
         for(let i of data){
           // 将自己和好友的关系压入links中
-          links.push({source:'我',target:i.name,value:1});
+          links.push({source:myQQ,target:i.uin,value:2});
 
           // 把自己的好友信息压入gruop和nodes中
           groups.group1.push({qq:i.uin,name:i.name});
-          nodes.push({id:i.name,group:2})
+          nodes.push({id:i.uin,group:2,name:i.name})
 
 
 
@@ -168,9 +168,9 @@ function getFriendsVistors(friend_qq,friend_name){
 
         for(let i of data){
           // 把朋友压入nodes
-          nodes.push({id:i.name,group:3})
+          nodes.push({id:i.uin,group:3,name:i.name})
           // 把关系压入links
-          links.push({source:friend_name,target:i.name,value:1}) 
+          links.push({source:friend_name,target:i.uin,value:1}) 
 
           // 把朋友的qq号再压入
           groups.group1.push({qq:i.uin,name:i.name});
@@ -209,9 +209,9 @@ function getFriendsVistors2(friend_qq,friend_name){
 
         for(let i of data){
           // 把朋友压入nodes
-          nodes.push({id:i.name,group:4})
+          nodes.push({id:i.uin,group:4,name:i.name})
           // 把关系压入links
-          links.push({source:friend_name,target:i.name,value:1}) 
+            links.push({source:friend_qq,target:i.uin,value:1})
 
           // 把朋友的qq号再压入
           //groups.group2.push({qq:i.uin,name:i.name});
@@ -240,18 +240,64 @@ function getFriendsVistors2(friend_qq,friend_name){
 }*/
 
 
+
+function unRepeatObject(arr){
+			var tmepArr = [];
+			// 将数组对象转成数组字符串
+			var newStr = changeArrStr(arr);
+			newStr.sort();
+			// 数组去重
+			for(var i=0;i<newStr.length;i++){
+				if(newStr[i] !== tmepArr[tmepArr.length-1]){
+					tmepArr.push(newStr[i]);
+				}
+			}
+			var newArr = [];
+			// 新数组字符串转成数组对象
+			for(var i=0;i<tmepArr.length;i++){
+				newArr.push(JSON.parse(tmepArr[i]));
+			}
+			return newArr;
+		}
+
+
+		function changeArrStr(arr){
+			var newArr = [];
+			if(arr.length !== 0){
+				for(var i=0;i<arr.length;i++){
+					var thisObj = sortObjectFun(arr[i]);
+					var thisStr = JSON.stringify(thisObj);
+					thisStr = thisStr.replace(/(\s|[\\t])/g,''); // 去除空格及\t空白字符
+					newArr.push(thisStr);
+				}
+			}
+			return newArr;
+		}
+function sortObjectFun(obj){
+			var keyArr = [];// 对象的key
+			for(var item in obj){
+				keyArr.push(item);
+			};
+			keyArr.sort(); // 降序
+			var newObj = {};
+			for(var i=0;i<keyArr.length;i++){
+				newObj[keyArr[i]] = obj[keyArr[i]]
+			}
+			return newObj;
+		}
+
 // 程序开始
 // 先获取自己的好友
 getMyVistors();
-setTimeout(function(){
+/*setTimeout(function(){
   //console.log(groups.group1);
   for(let v of groups.group1){
     //getFriendsVistors2(v.qq,v.name);
   }
-},3000);
+},3000);*/
 setTimeout(function(){
   let data = {
-    nodes:nodes,
+    nodes:unRepeatObject(nodes),
     links:links
   }
   fs.writeFile('data.json',JSON.stringify(data), function(err){

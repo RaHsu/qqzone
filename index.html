@@ -12,28 +12,28 @@
   stroke-width: 1.5px;
 }
 #box{
-	text-align: center;
+  text-align: center;
 }
 
 </style>
 <div id="box">
-	<svg id="svgBox" width="1080" height="800"></svg>
+  <div id="svgBox"></div>
 </div>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-/*var	svgBox = document.getElementById('svgBox');
-svg.height = window.innerHeight
-        || document.documentElement.clientHeight
-        || document.body.clientHeight;
 
-svg.width = window.innerWidth
-        || document.documentElement.clientWidth
-        || document.body.clientWidth;*/
+var qq = parseInt(location.search.split('=')[1]);
 
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+var svgBox = document.getElementById('svgBox');
+svgBox.style.height = window.innerHeight+'px';
+
+
+svgBox.style.width = window.innerWidth+'px';
+
+var svg = d3.select("#svgBox").append('svg').attr('width', window.innerWidth).attr('height', window.innerHeight);
+var width = window.innerHeight;
+var height = window.innerHeight;
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -53,8 +53,8 @@ d3.json("data.json", function(error, graph) {
     .data(graph.links)
     .enter().append("line")
       .attr("stroke-width", function(d) { return 1; })
-      
-  
+
+
 
   var node = svg.append("g")
       .attr("class", "node")
@@ -62,16 +62,16 @@ d3.json("data.json", function(error, graph) {
     .data(graph.nodes)
     .enter().append("circle")
       .attr("r", function(d){
-      	if(d.id === '我'){
-      		return 35;
-      	}
-       return 20; 
+        if(d.id === qq){
+          return 35;
+        }
+       return 20;
       })
       .attr("fill", function(d) {
-      	if(d.id === '我'){
-      		return '#f95959';
-      	}
-       return color(d.group); 
+        if(d.id === qq){
+          return '#f95959';
+        }
+       return color(d.group);
    })
       .call(d3.drag()
           .on("start", dragstarted)
@@ -82,11 +82,11 @@ d3.json("data.json", function(error, graph) {
     .attr("class", "labels")
   .selectAll("text")
   .data(graph.nodes)
-  .enter().append("text")  
+  .enter().append("text")
     .attr("dy", '.01em')
     .style('font-size', 10)
     .attr("text-anchor", "middle")
-    .text(function(d) {return d.id})
+    .text(function(d) {return d.name})
     .attr("fill", "darkgray");
 
 
@@ -95,9 +95,9 @@ d3.json("data.json", function(error, graph) {
       .text(function(d) { return d.id; });
 
   /*node.append('text')
-  	  .attr('dy','.1em')
-  	  .attr('text-anchor','middle')
-  	  .text(function(d){return d.id;});
+      .attr('dy','.1em')
+      .attr('text-anchor','middle')
+      .text(function(d){return d.id;});
 */
   simulation
       .nodes(graph.nodes)
